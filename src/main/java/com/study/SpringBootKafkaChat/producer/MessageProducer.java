@@ -4,7 +4,6 @@ import com.study.SpringBootKafkaChat.model.ChatRoom;
 import com.study.SpringBootKafkaChat.model.Message;
 import com.study.SpringBootKafkaChat.model.MessagePayload;
 import com.study.SpringBootKafkaChat.repository.ChatRoomRepository;
-import com.study.SpringBootKafkaChat.repository.MessageRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,18 +20,11 @@ public class MessageProducer {
 
     private final KafkaTemplate<String, MessagePayload> kafkaTemplate;
 
-    private final MessageRepository messageRepository;
-
     private final ChatRoomRepository chatRoomRepository;
 
     @Autowired
-    public MessageProducer(
-            KafkaTemplate<String, MessagePayload> kafkaTemplate,
-            MessageRepository messageRepository,
-            ChatRoomRepository chatRoomRepository) {
-
+    public MessageProducer(KafkaTemplate<String, MessagePayload> kafkaTemplate, ChatRoomRepository chatRoomRepository) {
         this.kafkaTemplate = kafkaTemplate;
-        this.messageRepository = messageRepository;
         this.chatRoomRepository = chatRoomRepository;
     }
 
@@ -52,7 +44,6 @@ public class MessageProducer {
         newMessage.setTimestamp(LocalDateTime.now().toString());
         chatRoom.addMessage(newMessage);
         chatRoomRepository.save(chatRoom);
-        messageRepository.save(newMessage);
 
         kafkaTemplate.send(topic, message);
     }

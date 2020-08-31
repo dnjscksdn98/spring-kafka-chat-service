@@ -1,22 +1,17 @@
 package com.study.SpringBootKafkaChat.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+@Document(collection = "chatRooms")
 public class ChatRoom {
 
     @Id
-    @GeneratedValue
-    private Long id;
-
+    private String id;
     private String name;
-
-    @OneToMany(mappedBy = "chatRoom")
     private List<Message> messages = new ArrayList<>();
 
     protected ChatRoom() {
@@ -27,11 +22,16 @@ public class ChatRoom {
         this.name = name;
     }
 
-    public Long getId() {
+    public ChatRoom(String name, List<Message> messages) {
+        this.name = name;
+        this.messages = messages;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -48,7 +48,6 @@ public class ChatRoom {
     }
 
     public void addMessage(Message message) {
-        message.setChatRoom(this);
         messages.add(message);
     }
 }

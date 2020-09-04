@@ -27,6 +27,7 @@ public class ProducerConfigurations {
     @Bean
     public Map<String, Object> producerConfig() {
         Map<String, Object> config = new HashMap<>();
+        config.put(JsonSerializer.ADD_TYPE_INFO_HEADERS, false);  // for kafka-proxy - disable adding info headers
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaConstants.KAFKA_BROKER);
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
